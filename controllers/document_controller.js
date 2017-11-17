@@ -36,6 +36,7 @@ exports.document_detail = function(req, res, next) {
 exports.document_create_get = function(req, res, next) {
   res.render("document/document_form", {
     title: 'Express Documents',
+    document: new Document({title: '', body: ''})
   });
 };
 
@@ -58,7 +59,7 @@ exports.document_create_post = function(req, res, next) {
 };
 
 // Handle document DELETE
-exports.document_delete = function(req, res, nex) {
+exports.document_delete = function(req, res, next) {
   Document.findByIdAndRemove(req.body.documentId).exec(function (err, document) {
     if(err) {
       next(err);
@@ -67,3 +68,35 @@ exports.document_delete = function(req, res, nex) {
     res.redirect('/document');
   });
 };
+
+// Display document edit form on GET
+exports.document_edit = function(req, res, next) {
+  Document.findById(req.params.id).exec(function (err, document) {
+    if(err) {
+      next(err);
+    }
+    //Success
+    res.render("document/document_form", {
+      title: document.title, 
+      document: document
+    });
+  });
+}
+
+// Handle document update on POST
+exports.document_update = function(req, res, next) {
+  let document = new Document({
+    title: req.body.title,
+    body: req.body.body,
+    _id: req.params.id
+  });
+
+  // Update the record.
+  Document.findByIdAndUpdate(req.params.id, document, {}, function(err, thedocument) {
+    if (err) {
+      return next(err);
+    }
+    //successful - redirect to document detail page.
+    res.redirect(thedocument.url);
+  });
+}

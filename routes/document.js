@@ -17,9 +17,12 @@ router.post('/create', document_controller.document_create_post);
 /* POST request to Delete Document */
 router.post('/delete', document_controller.document_delete);
 
-/* GET request to Edit Document */
-
 /* POST request to Update Document */
+router.post('/edit/:id', document_controller.document_update);
+
+/* GET request to Edit Document */
+router.get('/edit/:id', document_controller.document_edit);
+
 
 /* GET request for one Document. */
 router.get('/:id', document_controller.document_detail);
