@@ -8,10 +8,24 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var about = require('./routes/about');
+var documents = require('./routes/document');
+
+var engine = require('ejs-locals'); // For EJS layouts
+var dotenv = require('dotenv').config(); // DotEnv - Don't show passwords on GIT :)
 
 var app = express();
 
+//Set up mongoose connection
+var mongoose = require('mongoose');
+var mongoDB = `mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}/${process.env.DB_NAME}`;
+mongoose.connect(mongoDB, {
+  useMongoClient: true
+});
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'))
+
 // view engine setup
+app.engine('ejs', engine);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -34,6 +48,7 @@ app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.use('/', index);
 app.use('/users', users);
 app.use('/about', about);
+app.use('/document', documents);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
