@@ -1,0 +1,10 @@
+<% layout('../layout') -%>
+
+<ul>
+  <% documents.forEach( document=>{ %>
+  <li>
+    <a href="<%= document.url %>"><h2><%= document.title %></h2></a>
+    <p><%= document.summary %></p>
+  </li>
+  <% }); %>
+</ul>
