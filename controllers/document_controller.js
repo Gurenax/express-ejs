@@ -42,7 +42,7 @@ exports.document_create_get = function(req, res, next) {
 // Handle document create on POST
 exports.document_create_post = function(req, res, next) {
 
-  var document = new Document({
+  let document = new Document({
     title: req.body.title,
     body: req.body.body,
   });
@@ -54,5 +54,16 @@ exports.document_create_post = function(req, res, next) {
     }
     //successful - redirect to new book record.
     res.redirect(document.url);
+  });
+};
+
+// Handle document DELETE
+exports.document_delete = function(req, res, nex) {
+  Document.findByIdAndRemove(req.body.documentId).exec(function (err, document) {
+    if(err) {
+      next(err);
+    }
+    // Success
+    res.redirect('/document');
   });
 };

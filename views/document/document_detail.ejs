@@ -4,3 +4,8 @@
 <p>
   <%= document.body %>
 </p>
+
+<form action='/document/delete' method="POST">
+  <input type="hidden" name="documentId" value="<%= document._id %>">
+  <button type="submit" class="btn btn-primary">Delete</button>
+</form>
